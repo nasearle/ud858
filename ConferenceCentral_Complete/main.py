@@ -1,28 +1,15 @@
 #!/usr/bin/env python
-
-"""
-main.py -- Udacity conference server-side Python App Engine
-    HTTP controller handlers for memcache & task queue access
-
-$Id$
-
-created by wesc on 2014 may 24
-
-"""
-
-__author__ = 'wesc+api@google.com (Wesley Chun)'
-
 import webapp2
 from google.appengine.api import app_identity
 from google.appengine.api import mail
 from conference import ConferenceApi
+from google.appengine.api import app_identity
+from google.appengine.api import mail
+from google.appengine.api import memcache
+from google.appengine.ext import ndb
+from models import Session
 
-class SetAnnouncementHandler(webapp2.RequestHandler):
-    def get(self):
-        """Set Announcement in Memcache."""
-        ConferenceApi._cacheAnnouncement()
-        self.response.set_status(204)
-
+# Handlers for taskqueues
 
 class SendConfirmationEmailHandler(webapp2.RequestHandler):
     def post(self):
@@ -37,8 +24,28 @@ class SendConfirmationEmailHandler(webapp2.RequestHandler):
                 'conferenceInfo')
         )
 
+class SetAnnouncementHandler(webapp2.RequestHandler):
+    def get(self):
+        """Set Announcement in Memcache."""       
+        ConferenceApi._cacheAnnouncement()
 
+# If the speaker hosts at least one other session in this conference,
+# set them as the new featured speaker. This is called when a new 
+# session is added to the conference.
+class SetFeaturedSpeaker(webapp2.RequestHandler):  
+    def get(self):
+        conf = ndb.Key(urlsafe=self.request.get('websafeConferenceKey'))
+        sessions = Session.query(ancestor=conf)
+        speaker_sessions = sessions.filter(Session.speaker == self.request.get('speaker'))
+        speaker_session_names = [self.request.get('speaker')]
+        for sess in speaker_sessions:
+            speaker_session_names.append(sess.name)
+        if len(speaker_session_names) > 2:
+            memcache.set(key='featured_speaker_sessions', value=speaker_session_names)
+
+# Set URL's for each handler
 app = webapp2.WSGIApplication([
     ('/crons/set_announcement', SetAnnouncementHandler),
     ('/tasks/send_confirmation_email', SendConfirmationEmailHandler),
+    ('/tasks/set_featured_speaker', SetFeaturedSpeaker),
 ], debug=True)

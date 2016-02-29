@@ -14,21 +14,6 @@ indexes:
   properties:
   - name: city
   - name: maxAttendees
-  - name: month
-  - name: name
-
-- kind: Conference
-  properties:
-  - name: city
-  - name: maxAttendees
-  - name: month
-  - name: topics
-  - name: name
-
-- kind: Conference
-  properties:
-  - name: city
-  - name: maxAttendees
   - name: name
 
 - kind: Conference
@@ -40,32 +25,6 @@ indexes:
 - kind: Conference
   properties:
   - name: city
-  - name: month
-  - name: topics
-  - name: name
-
-- kind: Conference
-  properties:
-  - name: city
-  - name: name
-
-- kind: Conference
-  properties:
-  - name: city
-  - name: topics
-  - name: name
-
-- kind: Conference
-  properties:
-  - name: maxAttendees
-  - name: month
-  - name: name
-
-- kind: Conference
-  properties:
-  - name: maxAttendees
-  - name: month
-  - name: topics
   - name: name
 
 - kind: Conference
@@ -75,22 +34,20 @@ indexes:
 
 - kind: Conference
   properties:
-  - name: maxAttendees
-  - name: topics
-  - name: name
-
-- kind: Conference
-  properties:
   - name: month
   - name: name
 
 - kind: Conference
   properties:
-  - name: month
-  - name: topics
+  - name: seatsAvailable
   - name: name
 
-- kind: Conference
+- kind: Session
   properties:
-  - name: topics
+  - name: typeOfSession
+  - name: name
+
+- kind: Session
+  properties:
+  - name: speaker
   - name: name
