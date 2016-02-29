@@ -20,7 +20,7 @@ This is a web application that enables users to create and customize conferences
 	* LICENSE
 
 ### Using the Application:
-To use the application go to [delta-entity-114022.appspot.com](delta-entity-114022.appspot.com).
+To use the application go to [delta-entity-114022.appspot.com](https://delta-entity-114022.appspot.com).
 From the homepage you can log in, edit your profile, create conferences, and view and edit conferences.
 
 #### Task 1: Design Choices Response
